@@ -1,0 +1,44 @@
+name: Update
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # 每 2 小时运行一次
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 添加手动触发事件
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  Update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with: # 非常重要，不完整checkout（浅层clone）会导致push失败
+          fetch-depth: 0
+
+      - name: Get Time  
+        id: get_time  
+        run: |  
+            echo "NOW=$(date +'%Y-%m-%d %H:%M:%S %Z%z')" >> $GITHUB_ENV #获取当前时间并写入环境变量  
+      
+      - name: Update hosts file # 更新hosts文件
+        run: |  
+          rm -f hosts # 移除旧的hosts文件（如果存在）
+          wget https://github.com/sinspired/cnNetTool/raw/refs/heads/master/hosts -O hosts # 从指定URL下载新的hosts文件
+          echo "Auto Update hosts file at $NOW" > README.md # 更新README.md文件中的提示信息
+            
+      - name: Configure Git  
+        run: |  
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"  
+          git config --local user.name "github-actions[bot]"  
+           
+      - name: Commit and Push  
+        run: |  
+          git add -A  
+          git commit -m "Update hosts file - $(date +'%Y-%m-%d %H:%M:%S %Z%z')" || echo "No changes to commit" # 如果没有文件被修改，就跳过commit  
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}  
+          git push origin main
