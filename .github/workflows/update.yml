@@ -20,16 +20,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Time    
-        id: get_time    
-        run: |    
-            echo "NOW=$(date +'%Y-%m-%d %H:%M:%S %Z%z')" >> $GITHUB_ENV #获取当前时间并写入环境变量    
-        
+      - name: Get Time
+        id: get_time
+        run: |
+          echo "NOW=$(date +'%Y-%m-%d %H:%M:%S %Z%z')" >> $GITHUB_ENV #获取当前时间并写入环境变量
+
       - name: Download latest hosts file from sinspired/cnNetTool # 下载sinspired/cnNetTool的hosts文件
-        run: |    
-          rm -f hosts # 移除旧的hosts文件（如果存在）  
+        run: |
+          rm -f hosts # 移除旧的hosts文件（如果存在）
           wget https://github.com/sinspired/cnNetTool/raw/refs/heads/master/hosts -O hosts # 从指定URL下载最新的hosts文件
-          
+
+      - name: Remove unwanted cnNetTool lines # 删除cnNetTool相关的提示行
+        run: |
+          sed -i '/^cnNetTool Start in/d' hosts
+          sed -i '/^# Update time:/d' hosts
+          sed -i '/^# GitHub仓库:/d' hosts
+          sed -i '/^# cnNetTool End/d' hosts
+
       - name: Customize Google Translate IPs # 自定义谷歌翻译的IP地址，实现IP轮换
         run: |
           # 定义你想要设置的IP列表
@@ -43,23 +50,23 @@ jobs:
             "120.79.149.13"
             "39.101.73.57"
           )
-          
+
           # 计算IP列表的长度
           IP_COUNT=${#GOOGLE_TRANSLATE_IPS[@]}
-          
+
           # 获取当前小时 (0-23)
           CURRENT_HOUR=$(date +%H)
-          
+
           # 计算索引，实现IP轮换
           # 由于cron是每两小时运行一次 (*/2)，我们可以利用 (当前小时 / 2) 对IP数量取模，
           # 这样每次运行（每两小时）都会选择不同的IP。
           INDEX=$(( (CURRENT_HOUR / 2) % IP_COUNT ))
-          
+
           # 选取当前轮换的IP
           SELECTED_IP=${GOOGLE_TRANSLATE_IPS[$INDEX]}
-          
+
           echo "Selected Google Translate IP for this run: ${SELECTED_IP}"
-          
+
           # 使用 sed 替换谷歌翻译相关域名的IP地址。
           # sed -i 选项表示直接修改文件。
           # 's/^[0-9.]\+/' 匹配行首的任意IP地址。
@@ -67,21 +74,21 @@ jobs:
           sed -i "/translate\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
           sed -i "/translate-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
           sed -i "/jnn-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
-          
+
           echo "Updated Google Translate IPs in hosts file to ${SELECTED_IP}."
 
-      - name: Update README.md file # 更新README.md文件中的提示信息  
-        run: |    
+      - name: Update README.md file # 更新README.md文件中的提示信息
+        run: |
           echo "Auto Update hosts file at $NOW" > README.md
-              
-      - name: Configure Git    
-        run: |    
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"    
-          git config --local user.name "github-actions[bot]"    
-             
-      - name: Commit and Push    
-        run: |    
-          git add -A    
-          git commit -m "Update hosts file - $(date +'%Y-%m-%d %H:%M:%S %Z%z')" || echo "No changes to commit" # 如果没有文件被修改，就跳过commit    
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}    
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Commit and Push
+        run: |
+          git add -A
+          git commit -m "Update hosts file - $(date +'%Y-%m-%d %H:%M:%S %Z%z')" || echo "No changes to commit" # 如果没有文件被修改，就跳过commit
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push origin main
