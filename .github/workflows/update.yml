@@ -32,7 +32,7 @@ jobs:
 
       - name: Remove unwanted cnNetTool lines # 删除cnNetTool相关的提示行
         run: |
-          sed -i '/^cnNetTool Start in/d' hosts
+          sed -i '/^# cnNetTool Start in/d' hosts # <-- 这一行已修改
           sed -i '/^# Update time:/d' hosts
           sed -i '/^# GitHub仓库:/d' hosts
           sed -i '/^# cnNetTool End/d' hosts
