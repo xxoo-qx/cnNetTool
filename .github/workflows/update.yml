@@ -83,8 +83,8 @@ jobs:
           sed -i '/msedgeextensions\.sf\.tlu\.dl\.delivery\.mp\.microsoft\.com/d' hosts
           
           # 添加新的自定义条目
-          echo "150.171.27.11 edge.microsoft.com" >> hosts
-          echo "218.24.84.120 msedgeextensions.sf.tlu.dl.delivery.mp.microsoft.com" >> hosts
+          echo -e "150.171.27.11 edge.microsoft.com" >> hosts
+          echo -e "218.24.84.120 msedgeextensions.sf.tlu.dl.delivery.mp.microsoft.com" >> hosts
           
           echo "Added Microsoft Edge custom entries to hosts file."
 
