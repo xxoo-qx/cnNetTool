@@ -76,6 +76,7 @@ jobs:
           sed -i "/jnn-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
 
           echo "Updated Google Translate IPs in hosts file to ${SELECTED_IP}."
+          
       - name: Add Microsoft Edge custom entries # 新增步骤：添加Microsoft Edge自定义条目
         run: |
           # 先删除可能存在的旧条目
