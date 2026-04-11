@@ -28,7 +28,7 @@ jobs:
       - name: Download latest hosts file from sinspired/cnNetTool # 下载sinspired/cnNetTool的hosts文件
         run: |
           rm -f hosts # 移除旧的hosts文件（如果存在）
-          wget https://github.com/521xueweihan/GitHub520/blob/main/hosts -O hosts # 从指定URL下载最新的hosts文件
+          wget https://raw.githubusercontent.com/521xueweihan/GitHub520/refs/heads/main/hosts -O hosts # 从指定URL下载最新的hosts文件
 
       - name: Remove unwanted cnNetTool lines # 删除cnNetTool相关的提示行
         run: |
