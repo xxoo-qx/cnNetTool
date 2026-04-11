@@ -41,6 +41,7 @@ jobs:
           sed -i '/^# Update url:/d' hosts
           sed -i '/^# Star me:/d' hosts
           sed -i '/^# Last update time:/d' hosts 
+          sed -i '/^$/d' hosts
 
       - name: Customize Google Translate IPs # 自定义谷歌翻译的IP地址，实现IP轮换
         run: |
