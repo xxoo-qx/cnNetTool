@@ -33,10 +33,14 @@ jobs:
       - name: Remove unwanted cnNetTool lines # 删除cnNetTool相关的提示行
         run: |
           sed -i '/^# cnNetTool Start in/d' hosts # <-- 这一行已修改
-          sed -i '/^# GitHub520 Host Start in/d' hosts #
           sed -i '/^# Update time:/d' hosts
           sed -i '/^# GitHub仓库:/d' hosts
           sed -i '/^# cnNetTool End/d' hosts
+          sed -i '/^# GitHub520 Host Start/d' hosts
+          sed -i '/^# GitHub520 Host End/d' hosts
+          sed -i '/^# Update url:/d' hosts
+          sed -i '/^# Star me:/d' hosts
+          sed -i '/^# Last update time:/d' hosts 
 
       - name: Customize Google Translate IPs # 自定义谷歌翻译的IP地址，实现IP轮换
         run: |
@@ -71,10 +75,22 @@ jobs:
           # 使用 sed 替换谷歌翻译相关域名的IP地址。
           # sed -i 选项表示直接修改文件。
           # 's/^[0-9.]\+/' 匹配行首的任意IP地址。
-          sed -i "/translate\.google\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
-          sed -i "/translate\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
-          sed -i "/translate-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
-          sed -i "/jnn-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
+          # sed -i "/translate\.google\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
+          # sed -i "/translate\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
+          # sed -i "/translate-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
+          # sed -i "/jnn-pa\.googleapis\.com/s/^[0-9.]\+/${SELECTED_IP}/" hosts
+
+          # 1. 删除所有相关旧条目（避免重复）
+          sed -i '/translate\.google\.com/d' hosts
+          sed -i '/translate\.googleapis\.com/d' hosts
+          sed -i '/translate-pa\.googleapis\.com/d' hosts
+          sed -i '/jnn-pa\.googleapis\.com/d' hosts
+
+          # 再添加新条目
+          echo "${SELECTED_IP} translate.google.com" >> hosts
+          echo "${SELECTED_IP} translate.googleapis.com" >> hosts
+          echo "${SELECTED_IP} translate-pa.googleapis.com" >> hosts
+          echo "${SELECTED_IP} jnn-pa.googleapis.com" >> hosts
 
           echo "Updated Google Translate IPs in hosts file to ${SELECTED_IP}."
           
