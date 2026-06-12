@@ -21,11 +21,11 @@
 152.32.215.247                github-production-release-asset-2e65be.s3.amazonaws.com
 152.32.215.247                github-production-repository-file-5c1aeb.s3.amazonaws.com
 152.32.215.247                github-production-user-asset-6210df.s3.amazonaws.com
-152.32.215.247                github.blog
+192.0.66.2                    github.blog
 152.32.215.247                github.com
 152.32.215.247                github.community
 152.32.215.247                github.githubassets.com
-152.32.215.247                github.global.ssl.fastly.net
+151.101.193.194               github.global.ssl.fastly.net
 152.32.215.247                github.io
 152.32.215.247                github.map.fastly.net
 152.32.215.247                githubstatus.com
@@ -38,9 +38,9 @@
 152.32.215.247                vscode.dev
 152.32.215.247                education.github.com
 152.32.215.247                private-user-images.githubusercontent.com
-39.101.73.57 translate.google.com
-39.101.73.57 translate.googleapis.com
-39.101.73.57 translate-pa.googleapis.com
-39.101.73.57 jnn-pa.googleapis.com
+47.103.34.63 translate.google.com
+47.103.34.63 translate.googleapis.com
+47.103.34.63 translate-pa.googleapis.com
+47.103.34.63 jnn-pa.googleapis.com
 150.171.27.11 edge.microsoft.com
 218.24.84.120 msedgeextensions.sf.tlu.dl.delivery.mp.microsoft.com
