@@ -43,7 +43,7 @@ jobs:
           sed -i '/^# Last update time:/d' hosts 
           sed -i '/^$/d' hosts
 
-      - name: Customize Google Translate IPs # 自定义谷歌翻译的IP地址，实现IP轮换
+      - name: Customize Google Translate IPs # 自定义谷歌翻译和 www.google.com 的IP地址，实现IP轮换
         run: |
           # 定义你想要设置的IP列表
           # 注意：bash数组的定义方式，IFS=$'\n' 避免空格问题
@@ -86,14 +86,16 @@ jobs:
           sed -i '/translate\.googleapis\.com/d' hosts
           sed -i '/translate-pa\.googleapis\.com/d' hosts
           sed -i '/jnn-pa\.googleapis\.com/d' hosts
+          sed -i '/www\.google\.com/d' hosts
 
           # 再添加新条目
+          echo "${SELECTED_IP} www.google.com" >> hosts
           echo "${SELECTED_IP} translate.google.com" >> hosts
           echo "${SELECTED_IP} translate.googleapis.com" >> hosts
           echo "${SELECTED_IP} translate-pa.googleapis.com" >> hosts
           echo "${SELECTED_IP} jnn-pa.googleapis.com" >> hosts
 
-          echo "Updated Google Translate IPs in hosts file to ${SELECTED_IP}."
+          echo "Updated Google Translate and www.google.com IPs in hosts file to ${SELECTED_IP}."
           
       - name: Add Microsoft Edge custom entries # 新增步骤：添加Microsoft Edge自定义条目
         run: |
